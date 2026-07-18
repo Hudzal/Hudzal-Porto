@@ -822,7 +822,7 @@ function Contact() {
 
             <div className="lg:col-span-7">
               <form
-                action="https://web3forms.com"
+                action="https://api.web3forms.com/submit"
                 method="POST"
                 className="space-y-5"
               >
