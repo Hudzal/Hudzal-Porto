@@ -115,9 +115,9 @@ const MENTORING = [
     image: 'https://i.ibb.co.com/1ffB5J20/Dokumentasi-2.jpg'
   },
   {
-    title: 'Advanced Custom 1-on-1 NOC Mentorship',
+    title: 'Advanced NOC Mentorship',
     date: 'April 14, 2026',
-    desc: 'Mentorship privat 1-on-1 yang dipersonalisasi untuk pendalaman skill NOC tingkat lanjut.',
+    desc: 'Mentorship yang dipersonalisasi untuk pendalaman skill NOC tingkat lanjut.',
     imgComment: 'Taruh Direct Link Foto Sesi Mentorship Disini',
     image: 'https://i.ibb.co.com/ZRr1Mr4w/Dokumentasi-3.jpg'
   },
@@ -800,7 +800,7 @@ function Contact() {
                 <p className="text-xs font-semibold uppercase tracking-widest text-ink-400">
                   Find me online
                 </p>
-                <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                <div className="mt-3 flex flex-col sm:flex-row gap-3 flex-wrap">
                   {SOCIALS.map((s) => (
                     <a
                       key={s.label}
