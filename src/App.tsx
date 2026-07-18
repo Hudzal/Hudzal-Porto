@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowUpRight,
   Moon,
@@ -21,20 +21,26 @@ import {
   Wifi,
   CircleDot,
   MessageCircle,
-  Instagram,
-  User,
+  Linkedin,
+  Calendar,
+  Layers,
+  GitBranch,
+  RefreshCw,
+  Scale,
 } from 'lucide-react';
 
 const NAV = [
   { label: 'Home', href: '#top' },
   { label: 'Expertise', href: '#expertise' },
   { label: 'Experience', href: '#experience' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Mentoring', href: '#mentoring' },
   { label: 'Contact', href: '#contact' },
 ];
 
 const STATS = [
   { k: '4+', v: 'Years Experience', sub: 'NOC Specialist in ISP' },
-  { k: 'ISP', v: 'Network Scale', sub: 'Production infrastructure' },
+  { k: '8', v: 'Vendor Platforms', sub: 'Multi-vendor hardware' },
   { k: 'NOC', v: 'Mentoring', sub: 'Guiding next-gen engineers' },
   { k: 'Solid', v: 'Fundamentals', sub: 'Strong networking core' },
 ];
@@ -43,7 +49,7 @@ const EXPERTISE = [
   {
     icon: Activity,
     title: 'Network Operations & Troubleshooting',
-    desc: 'First-line NOC for an ISP — handling client complaints end to end: VPN between sites, web access, slow connections, email issues, and routing between sites.',
+    desc: 'First-line NOC for an ISP — handling client complaints end to end: VPN between sites, web access, slow connections, email issues, and routing between sites, up to the end-device level.',
     tags: ['NOC', 'Troubleshooting', 'VPN', 'Client Support', 'ISP Infrastructure'],
   },
   {
@@ -66,49 +72,74 @@ const EXPERTISE = [
   },
 ];
 
-const TIMELINE = [
+const VENDORS = [
+  { name: 'MikroTik', role: 'Main CPE Specialist', level: 'Expert' },
+  { name: 'Cisco', role: 'Routing & Switching', level: 'Proficient' },
+  { name: 'Ruijie', role: 'Enterprise Access', level: 'Proficient' },
+  { name: 'UniFi', role: 'Wireless & Edge', level: 'Proficient' },
+  { name: 'Huawei', role: 'Carrier-grade', level: 'Proficient' },
+  { name: 'Grandstream (GWN)', role: 'Wireless & VoIP', level: 'Proficient' },
+  { name: 'SonicWall', role: 'Security & Firewall', level: 'Familiar' },
+  { name: 'Fortigate', role: 'Next-Gen Firewall', level: 'Basic / Familiar' },
+];
+
+const NOC_DEPLOYMENTS = [
   {
-    period: '2021 — Present',
-    role: 'NOC Specialist',
-    org: 'Internet Service Provider',
-    type: 'Work',
-    desc: 'First-line NOC handling client complaints and keeping the ISP network healthy — from VPN and web access issues to email and routing between sites.',
-    points: [
-      'Triage client complaints: VPN between sites, web access, slow connections',
-      'Troubleshoot email issues and routing between sites',
-      'Monitor network health and escalate when needed',
-    ],
+    icon: Layers,
+    title: 'VLAN Deployment & Realignment',
+    desc: 'Pelurusan VLAN dan segmentasi jaringan untuk isolasi traffic, keamanan, dan performa optimal.',
   },
   {
-    period: '2022 — Present',
-    role: 'NOC Mentor & Educator',
-    org: 'Community & Training',
-    type: 'Teaching',
-    desc: 'Helping the next generation of NOC engineers get up to speed — sharing the fundamentals, troubleshooting mindset, and hands-on lab work.',
-    points: [
-      'Mentor junior NOC engineers on real-world troubleshooting',
-      'Run hands-on GNS3 lab sessions for fundamentals',
-      'Guide students through networking core concepts',
-    ],
+    icon: GitBranch,
+    title: 'Advanced Routing & Failover',
+    desc: 'Konfigurasi routing lanjutan dan manajemen failover untuk memastikan konektivitas tanpa downtime.',
   },
   {
-    period: '2024 — Present',
-    role: 'Security & Hardening Focus',
-    org: 'Self-Driven Learning',
-    type: 'Growth',
-    desc: 'Expanding into network security — firewall setup, VPN architecture, and infrastructure hardening as a next career step.',
-    points: [
-      'Studying firewall & VPN configurations',
-      'Practicing network hardening in lab environments',
-      'Bridging NOC operations with security mindset',
-    ],
+    icon: Lock,
+    title: 'Site-to-Site Tunneling & VPN',
+    desc: 'IPsec, L2TP, GRE, dan EoIP untuk menghubungkan site secara aman melalui jaringan publik.',
+  },
+  {
+    icon: Scale,
+    title: 'Load Balancing & Redundancy',
+    desc: 'Sistem load balancing dan redundancy untuk distribusi link ISP yang efisien dan reliabel.',
+  },
+];
+
+const MENTORING = [
+  {
+    title: 'NOC Fundamental & Infrastructure Training',
+    date: 'May 30, 2026',
+    desc: 'Sesi training fundamental NOC dan infrastruktur jaringan untuk calon engineer.',
+    imgComment: 'Taruh Direct Link Foto Slide Presentasi Training Disini',
+  },
+  {
+    title: 'Advanced Custom 1-on-1 NOC Mentorship',
+    date: 'April 14, 2026',
+    desc: 'Mentorship privat 1-on-1 yang dipersonalisasi untuk pendalaman skill NOC tingkat lanjut.',
+    imgComment: 'Taruh Direct Link Foto Sesi Mentorship Disini',
+  },
+  {
+    title: 'Customer Support Operations & Network Escalation Training',
+    date: 'April 24, 2026',
+    desc: 'Training operasi customer support dan eskalasi jaringan untuk penanganan tiket efektif.',
+    imgComment: 'Taruh Direct Link Foto Training Eskalasi Disini',
+  },
+];
+
+const PROJECTS = [
+  {
+    title: 'High-Availability Network Deployment (VRRP, PPPoE & DHCP)',
+    date: 'July 08, 2026',
+    desc: 'Successfully deployed and configured VRRP (Virtual Router Redundancy Protocol) for Hotspot network environment to ensure seamless automatic failover between Master and Backup routers. Combined with PPPoE Server, DHCP Setup, and implemented Load Balancing via PBR (Policy Based Routing) to optimize ISP link distribution.',
+    tags: ['VRRP', 'PPPoE', 'DHCP', 'PBR', 'Load Balancing', 'Failover'],
+    imgComment: 'Taruh Direct Link Screenshot Winbox VRRP Disini',
   },
 ];
 
 const SOCIALS = [
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/hudzal-ruquelme-f', handle: 'Hudzal Ruquelme F' },
   { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/6289654411835', handle: '+62 896-5441-1835' },
-  { icon: Instagram, label: 'Instagram', href: '#', handle: 'Hudzal' },
-  { icon: User, label: 'LinkedIn', href: '#', handle: 'Hudzal Ruquelme F' },
   { icon: Mail, label: 'Email', href: 'mailto:22hudzalrf@gmail.com', handle: '22hudzalrf@gmail.com' },
 ];
 
@@ -211,7 +242,7 @@ function Navbar({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
 
       <div
         className={`overflow-hidden md:hidden transition-all duration-500 ${
-          open ? 'max-h-72 opacity-100' : 'max-h-0 opacity-0'
+          open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="mx-4 mb-4 rounded-2xl border border-ink-200/60 bg-ink-50/95 p-2 backdrop-blur-xl dark:border-ink-800/60 dark:bg-ink-950/95">
@@ -417,39 +448,52 @@ function Expertise() {
           ))}
         </div>
 
-        <Toolbelt />
+        <VendorBelt />
       </div>
     </section>
   );
 }
 
-function Toolbelt() {
-  const tools = [
-    { icon: Activity, label: 'NOC Monitoring' },
-    { icon: Wifi, label: 'VPN' },
-    { icon: Router, label: 'Routing' },
-    { icon: Cpu, label: 'GNS3' },
-    { icon: Server, label: 'VMware' },
-    { icon: Lock, label: 'Firewall' },
-    { icon: Gauge, label: 'Troubleshooting' },
-    { icon: Shield, label: 'Hardening' },
-  ];
+function VendorBelt() {
   return (
-    <div className="reveal mt-12">
-      <p className="text-xs font-semibold uppercase tracking-widest text-ink-400">
-        Toolbelt
-      </p>
-      <div className="mt-4 flex flex-wrap gap-2.5">
-        {tools.map((t) => (
+    <div className="reveal mt-14">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-ink-400">
+            Multi-Vendor Hardware
+          </p>
+          <h3 className="mt-2 font-display text-2xl font-bold tracking-tight">
+            Network vendors I work with.
+          </h3>
+        </div>
+      </div>
+
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {VENDORS.map((v) => (
           <div
-            key={t.label}
-            className="inline-flex items-center gap-2 rounded-2xl border border-ink-200/70 bg-ink-50/60 px-4 py-2.5 text-sm font-medium text-ink-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-400/60 dark:border-ink-800 dark:bg-ink-900/60 dark:text-ink-200"
+            key={v.name}
+            className="group relative overflow-hidden rounded-2xl border border-ink-200/70 bg-ink-50/60 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-400/60 hover:shadow-lg hover:shadow-accent-500/5 dark:border-ink-800 dark:bg-ink-900/60"
           >
-            <t.icon className="h-4 w-4 text-accent-500" />
-            {t.label}
+            <div className="flex items-center justify-between">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-ink-900 font-display text-sm font-bold text-accent-400 transition-colors group-hover:bg-accent-500 group-hover:text-ink-950 dark:bg-ink-100 dark:text-ink-950">
+                {v.name.charAt(0)}
+              </span>
+              <span className="rounded-full bg-accent-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-accent-600 dark:text-accent-400">
+                {v.level}
+              </span>
+            </div>
+            <h4 className="mt-3 font-display text-base font-semibold tracking-tight">
+              {v.name}
+            </h4>
+            <p className="mt-0.5 text-xs text-ink-500 dark:text-ink-400">{v.role}</p>
           </div>
         ))}
       </div>
+
+      <p className="mt-6 rounded-2xl border border-ink-200/70 bg-ink-100/40 px-5 py-4 text-sm text-ink-600 dark:border-ink-800 dark:bg-ink-900/40 dark:text-ink-300">
+        Capable of adapting swiftly to any network vendor hardware based on strong
+        network fundamentals.
+      </p>
     </div>
   );
 }
@@ -467,60 +511,233 @@ function Experience() {
           </h2>
           <p className="mt-4 max-w-xl text-ink-500 dark:text-ink-400">
             Four years in the NOC handling client issues, mentoring along the way, and
-            now stepping into security. Here's the timeline.
+            now stepping into security.
           </p>
         </div>
 
-        <div className="relative mt-14 pl-8 sm:pl-10">
-          {/* Vertical line */}
-          <div className="absolute left-3 top-2 bottom-2 w-px bg-gradient-to-b from-accent-500/60 via-ink-300/50 to-transparent sm:left-4 dark:via-ink-700/60" />
-
-          <div className="space-y-10">
-            {TIMELINE.map((item, i) => (
-              <div
-                key={i}
-                className="reveal relative"
-                style={{ transitionDelay: `${i * 80}ms` }}
-              >
-                {/* Node */}
-                <span className="absolute -left-[1.55rem] top-1.5 grid h-6 w-6 place-items-center rounded-full border border-accent-400/50 bg-ink-50 dark:bg-ink-950 sm:-left-[1.8rem]">
-                  <CircleDot className="h-3.5 w-3.5 text-accent-500" />
+        {/* NOC Specialist — 2-column layout */}
+        <div className="reveal mt-14 grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-7">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <span className="rounded-full bg-accent-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent-600 dark:text-accent-400">
+                  Work
                 </span>
+                <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight">
+                  NOC Specialist
+                </h3>
+                <p className="text-sm text-ink-500 dark:text-ink-400">
+                  Internet Service Provider
+                </p>
+              </div>
+              <span className="font-mono text-xs text-ink-500 dark:text-ink-400">
+                2021 — Present
+              </span>
+            </div>
 
-                <div className="group rounded-3xl border border-ink-200/70 bg-ink-50/60 p-6 transition-all duration-500 hover:border-accent-400/50 hover:shadow-xl hover:shadow-accent-500/5 sm:p-7 dark:border-ink-800 dark:bg-ink-900/40">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <h3 className="font-display text-lg font-semibold tracking-tight">
-                        {item.role}
-                      </h3>
-                      <p className="text-sm text-ink-500 dark:text-ink-400">{item.org}</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="rounded-full bg-accent-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent-600 dark:text-accent-400">
-                        {item.type}
+            <p className="mt-5 text-lg leading-relaxed text-ink-600 dark:text-ink-300">
+              Handling end-to-end ISP infrastructure operations, network deployment,
+              and complex troubleshooting up to the end-device level.
+            </p>
+
+            <div className="mt-7 grid gap-4 sm:grid-cols-2">
+              {NOC_DEPLOYMENTS.map((d) => (
+                <div
+                  key={d.title}
+                  className="group rounded-2xl border border-ink-200/70 bg-ink-50/60 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-400/60 dark:border-ink-800 dark:bg-ink-900/40"
+                >
+                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-ink-900 text-accent-400 transition-colors group-hover:bg-accent-500 group-hover:text-ink-950 dark:bg-ink-100 dark:text-ink-950">
+                    <d.icon className="h-4 w-4" />
+                  </div>
+                  <h4 className="mt-3 font-display text-sm font-semibold tracking-tight">
+                    {d.title}
+                  </h4>
+                  <p className="mt-1.5 text-sm text-ink-500 dark:text-ink-400">
+                    {d.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <div className="group relative overflow-hidden rounded-3xl border border-ink-200/70 bg-ink-100/40 dark:border-ink-800 dark:bg-ink-900/40">
+              {/* Taruh Direct Link Foto Lab/Kantor Maxindo Disini */}
+              <img
+                src="https://images.pexels.com/photos/4421502/pexels-photo-4421502.jpeg?auto=compress&cs=tinysrgb&w=900"
+                alt="NOC Lab / Maxindo office"
+                className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-950/80 via-ink-950/30 to-transparent p-5">
+                <p className="text-sm font-semibold text-ink-50">NOC Operations Floor</p>
+                <p className="text-xs text-ink-200">ISP infrastructure & deployment lab</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Projects() {
+  return (
+    <section id="projects" className="relative py-24 lg:py-32">
+      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <div className="reveal">
+          <p className="text-sm font-semibold uppercase tracking-widest text-accent-600 dark:text-accent-400">
+            Production Projects
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            Real deployments in the field.
+          </h2>
+          <p className="mt-4 max-w-xl text-ink-500 dark:text-ink-400">
+            Highlighted production projects — engineered, deployed, and validated in
+            live ISP environments.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6">
+          {PROJECTS.map((p) => (
+            <article
+              key={p.title}
+              className="reveal group relative overflow-hidden rounded-3xl border border-ink-200/70 bg-ink-50/60 p-7 transition-all duration-500 hover:border-accent-400/60 hover:shadow-2xl hover:shadow-accent-500/5 sm:p-9 dark:border-ink-800 dark:bg-ink-900/40"
+            >
+              <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
+                <div className="lg:col-span-6">
+                  <div className="flex items-center gap-2 text-xs font-medium text-ink-500 dark:text-ink-400">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span className="font-mono">{p.date}</span>
+                  </div>
+                  <h3 className="mt-4 font-display text-xl font-semibold tracking-tight sm:text-2xl">
+                    {p.title}
+                  </h3>
+                  <p className="mt-4 text-ink-600 dark:text-ink-300">{p.desc}</p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {p.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-md bg-ink-200/50 px-2.5 py-1 font-mono text-xs font-medium text-ink-600 dark:bg-ink-800/60 dark:text-ink-300"
+                      >
+                        {t}
                       </span>
-                      <span className="font-mono text-xs text-ink-500 dark:text-ink-400">
-                        {item.period}
-                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="lg:col-span-6">
+                  <div className="group/img relative overflow-hidden rounded-2xl border border-ink-200/70 bg-ink-100/40 dark:border-ink-800 dark:bg-ink-900/40">
+                    {/* Taruh Direct Link Screenshot Winbox VRRP Disini */}
+                    <img
+                      src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=900"
+                      alt="Winbox VRRP Screenshot"
+                      className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover/img:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-950/80 via-ink-950/30 to-transparent p-4">
+                      <p className="text-sm font-semibold text-ink-50">
+                        Winbox — VRRP Configuration
+                      </p>
+                      <p className="text-xs text-ink-200">Master / Backup failover</p>
                     </div>
                   </div>
-
-                  <p className="mt-4 text-ink-600 dark:text-ink-300">{item.desc}</p>
-
-                  <ul className="mt-4 space-y-2">
-                    {item.points.map((p) => (
-                      <li
-                        key={p}
-                        className="flex items-start gap-2.5 text-sm text-ink-600 dark:text-ink-400"
-                      >
-                        <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent-500" />
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               </div>
-            ))}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Mentoring() {
+  return (
+    <section id="mentoring" className="relative py-24 lg:py-32">
+      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <div className="reveal">
+          <p className="text-sm font-semibold uppercase tracking-widest text-accent-600 dark:text-accent-400">
+            Mentoring & Journey
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            Teaching the next generation of network engineers.
+          </h2>
+          <p className="mt-4 max-w-xl text-ink-500 dark:text-ink-400">
+            Hands-on training sessions and mentorship programs — sharing the NOC
+            mindset with students and community groups.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {MENTORING.map((m) => (
+            <article
+              key={m.title}
+              className="reveal group overflow-hidden rounded-3xl border border-ink-200/70 bg-ink-50/60 transition-all duration-500 hover:-translate-y-1 hover:border-accent-400/60 hover:shadow-2xl hover:shadow-accent-500/5 dark:border-ink-800 dark:bg-ink-900/40"
+            >
+              <div className="relative overflow-hidden">
+                {/* {m.imgComment} */}
+                <img
+                  src="https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg?auto=compress&cs=tinysrgb&w=700"
+                  alt={m.title}
+                  className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute top-3 left-3 rounded-full bg-ink-950/80 px-3 py-1 text-[11px] font-semibold text-ink-50 backdrop-blur">
+                  <span className="font-mono">{m.date}</span>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="font-display text-lg font-semibold tracking-tight">
+                  {m.title}
+                </h3>
+                <p className="mt-2 text-sm text-ink-500 dark:text-ink-400">{m.desc}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* Self-Driven Learning sub-section */}
+        <div className="reveal mt-12">
+          <div className="relative overflow-hidden rounded-3xl border border-ink-200/70 bg-gradient-to-br from-accent-400/10 to-electric-500/10 p-7 sm:p-9 dark:border-ink-800">
+            <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-accent-400/15 blur-3xl" />
+            <div className="relative grid gap-8 lg:grid-cols-12 lg:gap-10">
+              <div className="lg:col-span-5">
+                <span className="inline-flex items-center gap-2 rounded-full bg-accent-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent-600 dark:text-accent-400">
+                  <Shield className="h-3.5 w-3.5" />
+                  Growth
+                </span>
+                <h3 className="mt-4 font-display text-2xl font-bold tracking-tight">
+                  Self-Driven Learning: Security & Hardening Focus
+                </h3>
+                <p className="mt-3 font-mono text-xs text-ink-500 dark:text-ink-400">
+                  2024 — Present
+                </p>
+              </div>
+              <div className="lg:col-span-7">
+                <p className="text-ink-600 dark:text-ink-300">
+                  Expanding into network security — firewall setup, VPN architecture,
+                  and infrastructure hardening as a next career step. Bridging NOC
+                  operations with a security mindset to secure networks before they
+                  break, not after.
+                </p>
+                <ul className="mt-5 space-y-2.5">
+                  {[
+                    'Studying firewall & VPN configurations',
+                    'Practicing network hardening in lab environments',
+                    'Bridging NOC operations with security mindset',
+                  ].map((p) => (
+                    <li
+                      key={p}
+                      className="flex items-start gap-2.5 text-sm text-ink-600 dark:text-ink-300"
+                    >
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent-500" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -532,10 +749,9 @@ function Contact() {
   const [sent, setSent] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSent(true);
-    formRef.current?.reset();
     setTimeout(() => setSent(false), 4000);
   };
 
@@ -581,11 +797,13 @@ function Contact() {
                 <p className="text-xs font-semibold uppercase tracking-widest text-ink-400">
                   Find me online
                 </p>
-                <div className="mt-3 grid grid-cols-2 gap-2.5">
+                <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
                   {SOCIALS.map((s) => (
                     <a
                       key={s.label}
                       href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="group flex items-center gap-3 rounded-2xl border border-ink-200/70 bg-ink-50/60 px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-400/60 dark:border-ink-800 dark:bg-ink-900/60"
                     >
                       <s.icon className="h-4 w-4 text-ink-500 transition-colors group-hover:text-accent-600 dark:text-ink-400 dark:group-hover:text-accent-400" />
@@ -600,7 +818,13 @@ function Contact() {
             </div>
 
             <div className="lg:col-span-7">
-              <form ref={formRef} onSubmit={onSubmit} className="space-y-5">
+              <form
+                ref={formRef}
+                onSubmit={onSubmit}
+                method="POST"
+                action="https://formspree.io"
+                className="space-y-5"
+              >
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Name" name="name" placeholder="Your name" />
                   <Field label="Email" name="email" type="email" placeholder="you@email.com" />
@@ -635,10 +859,6 @@ function Contact() {
                     </>
                   )}
                 </button>
-                <p className="text-xs text-ink-400">
-                  This demo form confirms locally — connect it to your inbox or a backend
-                  to start receiving messages.
-                </p>
               </form>
             </div>
           </div>
@@ -693,9 +913,11 @@ function Footer() {
               key={s.label}
               href={s.href}
               aria-label={s.label}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-ink-400 transition-colors duration-300 hover:text-accent-600 dark:hover:text-accent-400"
             >
-              <s.icon className="h-4.5 w-4.5" />
+              <s.icon className="h-4 w-4" />
             </a>
           ))}
         </div>
@@ -716,6 +938,8 @@ export default function App() {
         <About />
         <Expertise />
         <Experience />
+        <Projects />
+        <Mentoring />
         <Contact />
       </main>
       <Footer />
