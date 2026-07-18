@@ -138,7 +138,7 @@ const PROJECTS = [
 ];
 
 const SOCIALS = [
-  { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/hudzal-ruquelme-f', handle: 'Hudzal Ruquelme F' },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/hudzal-ruquelme-f-574a37214/', handle: 'Hudzal Ruquelme F' },
   { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/6289654411835', handle: '+62 896-5441-1835' },
   { icon: Mail, label: 'Email', href: 'mailto:22hudzalrf@gmail.com', handle: '22hudzalrf@gmail.com' },
 ];
