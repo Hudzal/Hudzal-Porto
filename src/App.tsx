@@ -112,18 +112,21 @@ const MENTORING = [
     date: 'May 30, 2026',
     desc: 'Sesi training fundamental NOC dan infrastruktur jaringan untuk calon engineer.',
     imgComment: 'Taruh Direct Link Foto Slide Presentasi Training Disini',
+    image: 'https://i.ibb.co.com/1ffB5J20/Dokumentasi-2.jpg'
   },
   {
     title: 'Advanced Custom 1-on-1 NOC Mentorship',
     date: 'April 14, 2026',
     desc: 'Mentorship privat 1-on-1 yang dipersonalisasi untuk pendalaman skill NOC tingkat lanjut.',
     imgComment: 'Taruh Direct Link Foto Sesi Mentorship Disini',
+    image: 'https://i.ibb.co.com/ZRr1Mr4w/Dokumentasi-3.jpg'
   },
   {
     title: 'Customer Support Operations & Network Escalation Training',
     date: 'April 24, 2026',
     desc: 'Training operasi customer support dan eskalasi jaringan untuk penanganan tiket efektif.',
     imgComment: 'Taruh Direct Link Foto Training Eskalasi Disini',
+    image: 'https://i.ibb.co.com/5WhZW9B3/Dokumentasi-3.jpg'
   },
 ];
 
@@ -564,7 +567,7 @@ function Experience() {
             <div className="group relative overflow-hidden rounded-3xl border border-ink-200/70 bg-ink-100/40 dark:border-ink-800 dark:bg-ink-900/40">
               {/* Taruh Direct Link Foto Lab/Kantor Maxindo Disini */}
               <img
-                src="https://images.pexels.com/photos/4421502/pexels-photo-4421502.jpeg?auto=compress&cs=tinysrgb&w=900"
+                src="https://i.ibb.co.com/jk922F51/CC-NOC.png"
                 alt="NOC Lab / Maxindo office"
                 className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"
@@ -630,7 +633,7 @@ function Projects() {
                   <div className="group/img relative overflow-hidden rounded-2xl border border-ink-200/70 bg-ink-100/40 dark:border-ink-800 dark:bg-ink-900/40">
                     {/* Taruh Direct Link Screenshot Winbox VRRP Disini */}
                     <img
-                      src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=900"
+                      src="https://i.ibb.co.com/Q3kwmn0H/Topologi-lapangan.png"
                       alt="Winbox VRRP Screenshot"
                       className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover/img:scale-105"
                       loading="lazy"
@@ -678,7 +681,7 @@ function Mentoring() {
               <div className="relative overflow-hidden">
                 {/* {m.imgComment} */}
                 <img
-                  src="https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg?auto=compress&cs=tinysrgb&w=700"
+                  src={m.image}
                   alt={m.title}
                   className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
@@ -819,12 +822,12 @@ function Contact() {
 
             <div className="lg:col-span-7">
               <form
-                ref={formRef}
-                onSubmit={onSubmit}
+                action="https://web3forms.com"
                 method="POST"
-                action="https://formspree.io"
                 className="space-y-5"
               >
+                <input type="hidden" name="access_key" value="253c32b5-4b48-4ff0-8e1d-640d24a50817" />
+
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Name" name="name" placeholder="Your name" />
                   <Field label="Email" name="email" type="email" placeholder="you@email.com" />
