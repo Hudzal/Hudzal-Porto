@@ -678,7 +678,7 @@ function Projects() {
                   <div className="group/img relative overflow-hidden rounded-2xl border border-ink-200/70 bg-ink-100/40 dark:border-ink-800 dark:bg-ink-900/40">
                     {/* Taruh Direct Link Screenshot Winbox VRRP Disini */}
                     <img
-                      src="https://i.ibb.co.com/Q3kwmn0H/Topologi-lapangan.png"
+                      src="https://i.ibb.co.com/hQJZC5m/vrrp-primary.png"
                       alt="Winbox VRRP Screenshot"
                       className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover/img:scale-105"
                       loading="lazy"
