@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import {
   ArrowUpRight,
   Moon,
@@ -27,7 +27,9 @@ import {
   GitBranch,
   RefreshCw,
   Scale,
+  Award,
 } from 'lucide-react';
+import CertificatesPage from './components/CertificatesPage';
 
 const NAV = [
   { label: 'Home', href: '#top' },
@@ -35,6 +37,7 @@ const NAV = [
   { label: 'Experience', href: '#experience' },
   { label: 'Projects', href: '#projects' },
   { label: 'Mentoring', href: '#mentoring' },
+  { label: 'Certificates', href: '#certificates' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -180,7 +183,15 @@ function useDarkMode() {
   return [dark, setDark] as const;
 }
 
-function Navbar({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => void }) {
+function Navbar({
+  dark,
+  onToggleDark,
+  onNavigate,
+}: {
+  dark: boolean;
+  onToggleDark: () => void;
+  onNavigate: (page: 'certificates') => void;
+}) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -208,15 +219,26 @@ function Navbar({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
         </a>
 
         <div className="hidden items-center gap-1 md:flex">
-          {NAV.map((n) => (
-            <a
-              key={n.href}
-              href={n.href}
-              className="rounded-full px-4 py-2 text-sm font-medium text-ink-600 transition-colors duration-300 hover:bg-ink-200/60 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800/60 dark:hover:text-ink-50"
-            >
-              {n.label}
-            </a>
-          ))}
+          {NAV.map((n) =>
+            n.href === '#certificates' ? (
+              <button
+                key={n.href}
+                onClick={() => onNavigate('certificates')}
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-ink-600 transition-colors duration-300 hover:bg-ink-200/60 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800/60 dark:hover:text-ink-50"
+              >
+                <Award className="h-3.5 w-3.5 text-accent-500" />
+                {n.label}
+              </button>
+            ) : (
+              <a
+                key={n.href}
+                href={n.href}
+                className="rounded-full px-4 py-2 text-sm font-medium text-ink-600 transition-colors duration-300 hover:bg-ink-200/60 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800/60 dark:hover:text-ink-50"
+              >
+                {n.label}
+              </a>
+            ),
+          )}
         </div>
 
         <div className="flex items-center gap-2">
@@ -249,16 +271,30 @@ function Navbar({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
         }`}
       >
         <div className="mx-4 mb-4 rounded-2xl border border-ink-200/60 bg-ink-50/95 p-2 backdrop-blur-xl dark:border-ink-800/60 dark:bg-ink-950/95">
-          {NAV.map((n) => (
-            <a
-              key={n.href}
-              href={n.href}
-              onClick={() => setOpen(false)}
-              className="block rounded-xl px-4 py-3 text-sm font-medium text-ink-700 transition-colors hover:bg-ink-200/60 dark:text-ink-200 dark:hover:bg-ink-800/60"
-            >
-              {n.label}
-            </a>
-          ))}
+          {NAV.map((n) =>
+            n.href === '#certificates' ? (
+              <button
+                key={n.href}
+                onClick={() => {
+                  setOpen(false);
+                  onNavigate('certificates');
+                }}
+                className="flex w-full items-center gap-2 rounded-xl px-4 py-3 text-left text-sm font-medium text-ink-700 transition-colors hover:bg-ink-200/60 dark:text-ink-200 dark:hover:bg-ink-800/60"
+              >
+                <Award className="h-3.5 w-3.5 text-accent-500" />
+                {n.label}
+              </button>
+            ) : (
+              <a
+                key={n.href}
+                href={n.href}
+                onClick={() => setOpen(false)}
+                className="block rounded-xl px-4 py-3 text-sm font-medium text-ink-700 transition-colors hover:bg-ink-200/60 dark:text-ink-200 dark:hover:bg-ink-800/60"
+              >
+                {n.label}
+              </a>
+            ),
+          )}
         </div>
       </div>
     </header>
@@ -349,7 +385,7 @@ function Stats() {
   );
 }
 
-function About() {
+function About({ onNavigate }: { onNavigate: (page: 'certificates') => void }) {
   return (
     <section id="about" className="relative py-24 lg:py-28">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
@@ -395,6 +431,15 @@ function About() {
                 ),
               )}
             </div>
+
+            <button
+              onClick={() => onNavigate('certificates')}
+              className="reveal group mt-8 inline-flex items-center gap-2.5 rounded-full border border-accent-400/60 bg-accent-400/10 px-5 py-3 text-sm font-semibold text-accent-700 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-400/20 hover:shadow-lg hover:shadow-accent-500/10 dark:text-accent-300 dark:hover:bg-accent-400/15"
+            >
+              <Award className="h-4 w-4" />
+              View All Certificates
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </button>
           </div>
         </div>
       </div>
@@ -931,21 +976,52 @@ function Footer() {
 
 export default function App() {
   const [dark, setDark] = useDarkMode();
+  const [page, setPage] = useState<'home' | 'certificates'>('home');
+  const [transitioning, setTransitioning] = useState(false);
+
+  const navigate = useCallback((target: 'home' | 'certificates') => {
+    setTransitioning(true);
+    window.setTimeout(() => {
+      setPage(target);
+      setTransitioning(false);
+    }, 260);
+  }, []);
+
   useReveal();
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-      <Navbar dark={dark} onToggleDark={() => setDark((v) => !v)} />
-      <main>
-        <Hero />
-        <About />
-        <Expertise />
-        <Experience />
-        <Projects />
-        <Mentoring />
-        <Contact />
-      </main>
-      <Footer />
+      {page === 'home' ? (
+        <div
+          className={`transition-opacity duration-300 ${transitioning ? 'opacity-0' : 'opacity-100'}`}
+        >
+          <Navbar
+            dark={dark}
+            onToggleDark={() => setDark((v) => !v)}
+            onNavigate={() => navigate('certificates')}
+          />
+          <main>
+            <Hero />
+            <About onNavigate={() => navigate('certificates')} />
+            <Expertise />
+            <Experience />
+            <Projects />
+            <Mentoring />
+            <Contact />
+          </main>
+          <Footer />
+        </div>
+      ) : (
+        <div
+          className={`transition-opacity duration-300 ${transitioning ? 'opacity-0' : 'opacity-100'}`}
+        >
+          <CertificatesPage
+            dark={dark}
+            onToggleDark={() => setDark((v) => !v)}
+            onBack={() => navigate('home')}
+          />
+        </div>
+      )}
     </div>
   );
 }
