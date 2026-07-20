@@ -167,7 +167,7 @@ export const CERTIFICATES: Certificate[] = [
     description:
       'Membangun dan menguji topologi jaringan di lab virtual sebelum diterapkan ke produksi. Reproducible, aman, dan cepat.',
     image:
-      'https://i.ibb.co.com/39nS06br/vrrp-primary.png',
+      'https://i.ibb.co.com/Q3kwmn0H/Topologi-lapangan.png',
     tags: ['GNS3', 'VMware', 'Virtualization', 'Lab Design'],
   },
 ];
