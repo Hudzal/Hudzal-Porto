@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import {
   ArrowUpRight,
   Moon,
@@ -148,7 +148,7 @@ const SOCIALS = [
   { icon: Mail, label: 'Email', href: 'mailto:22hudzalrf@gmail.com', handle: '22hudzalrf@gmail.com' },
 ];
 
-function useReveal() {
+function useReveal(trigger?: unknown) {
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver(
@@ -164,7 +164,7 @@ function useReveal() {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [trigger]);
 }
 
 function useDarkMode() {
@@ -186,10 +186,12 @@ function Navbar({
   dark,
   onToggleDark,
   onNavigate,
+  onNavigateHome,
 }: {
   dark: boolean;
   onToggleDark: () => void;
   onNavigate: (page: 'certificates') => void;
+  onNavigateHome: (href: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -210,7 +212,14 @@ function Navbar({
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
-        <a href="#top" className="group flex items-center gap-2.5">
+        <a
+          href="#top"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigateHome('#top');
+          }}
+          className="group flex items-center gap-2.5"
+        >
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-ink-900 text-accent-400 transition-transform duration-300 group-hover:scale-105 dark:bg-ink-100 dark:text-ink-950">
             <NetworkIcon className="h-5 w-5" />
           </span>
@@ -232,6 +241,10 @@ function Navbar({
               <a
                 key={n.href}
                 href={n.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigateHome(n.href);
+                }}
                 className="rounded-full px-4 py-2 text-sm font-medium text-ink-600 transition-colors duration-300 hover:bg-ink-200/60 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800/60 dark:hover:text-ink-50"
               >
                 {n.label}
@@ -250,6 +263,10 @@ function Navbar({
           </button>
           <a
             href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigateHome('#contact');
+            }}
             className="hidden rounded-full bg-ink-900 px-5 py-2 text-sm font-medium text-ink-50 transition-all duration-300 hover:bg-accent-600 hover:shadow-lg hover:shadow-accent-500/20 sm:inline-flex dark:bg-ink-100 dark:text-ink-950 dark:hover:bg-accent-400 dark:hover:text-ink-950"
           >
             Let's talk
@@ -287,7 +304,11 @@ function Navbar({
               <a
                 key={n.href}
                 href={n.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpen(false);
+                  onNavigateHome(n.href);
+                }}
                 className="block rounded-xl px-4 py-3 text-sm font-medium text-ink-700 transition-colors hover:bg-ink-200/60 dark:text-ink-200 dark:hover:bg-ink-800/60"
               >
                 {n.label}
@@ -1004,6 +1025,7 @@ export default function App() {
   const [dark, setDark] = useDarkMode();
   const [page, setPage] = useState<'home' | 'certificates'>('home');
   const [transitioning, setTransitioning] = useState(false);
+  const pendingScroll = useRef<string | null>(null);
 
   const navigate = useCallback((target: 'home' | 'certificates') => {
     setTransitioning(true);
@@ -1014,7 +1036,34 @@ export default function App() {
     }, 260);
   }, []);
 
-  useReveal();
+  const navigateHome = useCallback(
+    (href: string) => {
+      if (page !== 'home') {
+        pendingScroll.current = href;
+        setTransitioning(true);
+        window.setTimeout(() => {
+          setPage('home');
+          setTransitioning(false);
+        }, 260);
+      } else {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    },
+    [page],
+  );
+
+  useEffect(() => {
+    if (page === 'home' && pendingScroll.current) {
+      const href = pendingScroll.current;
+      pendingScroll.current = null;
+      const id = window.setTimeout(() => {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+      }, 80);
+      return () => window.clearTimeout(id);
+    }
+  }, [page]);
+
+  useReveal(page);
 
   return (
     <LightboxProvider>
@@ -1028,6 +1077,7 @@ export default function App() {
               dark={dark}
               onToggleDark={() => setDark((v) => !v)}
               onNavigate={() => navigate('certificates')}
+              onNavigateHome={navigateHome}
             />
             <main>
               <Hero />
