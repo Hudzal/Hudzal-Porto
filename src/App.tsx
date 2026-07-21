@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   ArrowUpRight,
   Moon,
@@ -14,22 +14,21 @@ import {
   Shield,
   GraduationCap,
   Network as NetworkIcon,
-  Router,
   Lock,
-  Cpu,
-  Gauge,
-  Wifi,
-  CircleDot,
   MessageCircle,
   Linkedin,
   Calendar,
   Layers,
   GitBranch,
-  RefreshCw,
   Scale,
   Award,
+  Download,
+  Loader2,
 } from 'lucide-react';
 import CertificatesPage from './components/CertificatesPage';
+import { LightboxProvider } from './components/Lightbox';
+import { ParticleMesh } from './components/ParticleMesh';
+import { SmartImage } from './components/SmartImage';
 
 const NAV = [
   { label: 'Home', href: '#top' },
@@ -302,6 +301,18 @@ function Navbar({
 }
 
 function Hero() {
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (downloading) return;
+    setDownloading(true);
+    window.setTimeout(() => {
+      setDownloading(false);
+      window.open('#', '_blank');
+    }, 1000);
+  };
+
   return (
     <section id="top" className="relative overflow-hidden pt-36 pb-20 lg:pt-44 lg:pb-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -309,6 +320,7 @@ function Hero() {
         <div className="absolute top-40 -right-24 h-96 w-96 rounded-full bg-electric-500/15 blur-3xl animate-blob [animation-delay:-6s]" />
         <div className="absolute inset-0 grain opacity-60" />
       </div>
+      <ParticleMesh />
 
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="reveal is-visible inline-flex items-center gap-2 rounded-full border border-ink-200/70 bg-ink-50/60 px-4 py-1.5 text-xs font-medium text-ink-600 backdrop-blur dark:border-ink-800 dark:bg-ink-900/60 dark:text-ink-300">
@@ -353,6 +365,23 @@ function Hero() {
             className="inline-flex items-center justify-center gap-2 rounded-full border border-ink-300/70 px-7 py-3.5 text-sm font-semibold text-ink-700 transition-all duration-300 hover:border-ink-900 hover:bg-ink-100 dark:border-ink-700 dark:text-ink-200 dark:hover:border-ink-500 dark:hover:bg-ink-900"
           >
             Get in touch
+          </a>
+          <a
+            href="#"
+            onClick={handleDownload}
+            className="group inline-flex items-center justify-center gap-2 rounded-full border border-accent-400/60 bg-accent-400/10 px-7 py-3.5 text-sm font-semibold text-accent-700 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-400/20 hover:shadow-lg hover:shadow-accent-500/10 dark:text-accent-300 dark:hover:bg-accent-400/15"
+          >
+            {downloading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Preparing…
+              </>
+            ) : (
+              <>
+                <Download className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+                Download CV
+              </>
+            )}
           </a>
         </div>
       </div>
@@ -611,11 +640,10 @@ function Experience() {
           <div className="lg:col-span-5">
             <div className="group relative overflow-hidden rounded-3xl border border-ink-200/70 bg-ink-100/40 dark:border-ink-800 dark:bg-ink-900/40">
               {/* Taruh Direct Link Foto Lab/Kantor Maxindo Disini */}
-              <img
+              <SmartImage
                 src="https://i.ibb.co.com/jk922F51/CC-NOC.png"
                 alt="NOC Lab / Maxindo office"
                 className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-950/80 via-ink-950/30 to-transparent p-5">
                 <p className="text-sm font-semibold text-ink-50">NOC Operations Floor</p>
@@ -677,11 +705,10 @@ function Projects() {
                 <div className="lg:col-span-6">
                   <div className="group/img relative overflow-hidden rounded-2xl border border-ink-200/70 bg-ink-100/40 dark:border-ink-800 dark:bg-ink-900/40">
                     {/* Taruh Direct Link Screenshot Winbox VRRP Disini */}
-                    <img
+                    <SmartImage
                       src="https://i.ibb.co.com/hQJZC5m/vrrp-primary.png"
                       alt="Winbox VRRP Screenshot"
                       className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover/img:scale-105"
-                      loading="lazy"
                     />
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-950/80 via-ink-950/30 to-transparent p-4">
                       <p className="text-sm font-semibold text-ink-50">
@@ -725,11 +752,10 @@ function Mentoring() {
             >
               <div className="relative overflow-hidden">
                 {/* {m.imgComment} */}
-                <img
+                <SmartImage
                   src={m.image}
                   alt={m.title}
                   className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
                 />
                 <div className="absolute top-3 left-3 rounded-full bg-ink-950/80 px-3 py-1 text-[11px] font-semibold text-ink-50 backdrop-blur">
                   <span className="font-mono">{m.date}</span>
@@ -795,7 +821,6 @@ function Mentoring() {
 
 function Contact() {
   const [sent, setSent] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -869,6 +894,7 @@ function Contact() {
               <form
                 action="https://api.web3forms.com/submit"
                 method="POST"
+                onSubmit={onSubmit}
                 className="space-y-5"
               >
                 <input type="hidden" name="access_key" value="253c32b5-4b48-4ff0-8e1d-640d24a50817" />
@@ -983,6 +1009,7 @@ export default function App() {
     setTransitioning(true);
     window.setTimeout(() => {
       setPage(target);
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
       setTransitioning(false);
     }, 260);
   }, []);
@@ -990,38 +1017,42 @@ export default function App() {
   useReveal();
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
-      {page === 'home' ? (
-        <div
-          className={`transition-opacity duration-300 ${transitioning ? 'opacity-0' : 'opacity-100'}`}
-        >
-          <Navbar
-            dark={dark}
-            onToggleDark={() => setDark((v) => !v)}
-            onNavigate={() => navigate('certificates')}
-          />
-          <main>
-            <Hero />
-            <About onNavigate={() => navigate('certificates')} />
-            <Expertise />
-            <Experience />
-            <Projects />
-            <Mentoring />
-            <Contact />
-          </main>
-          <Footer />
-        </div>
-      ) : (
-        <div
-          className={`transition-opacity duration-300 ${transitioning ? 'opacity-0' : 'opacity-100'}`}
-        >
-          <CertificatesPage
-            dark={dark}
-            onToggleDark={() => setDark((v) => !v)}
-            onBack={() => navigate('home')}
-          />
-        </div>
-      )}
-    </div>
+    <LightboxProvider>
+      <div className="relative min-h-screen overflow-x-hidden">
+        {page === 'home' ? (
+          <div
+            key="home"
+            className={`transition-opacity duration-300 ${transitioning ? 'opacity-0' : 'opacity-100'}`}
+          >
+            <Navbar
+              dark={dark}
+              onToggleDark={() => setDark((v) => !v)}
+              onNavigate={() => navigate('certificates')}
+            />
+            <main>
+              <Hero />
+              <About onNavigate={() => navigate('certificates')} />
+              <Expertise />
+              <Experience />
+              <Projects />
+              <Mentoring />
+              <Contact />
+            </main>
+            <Footer />
+          </div>
+        ) : (
+          <div
+            key="certificates"
+            className={`transition-opacity duration-300 ${transitioning ? 'opacity-0' : 'opacity-100'}`}
+          >
+            <CertificatesPage
+              dark={dark}
+              onToggleDark={() => setDark((v) => !v)}
+              onBack={() => navigate('home')}
+            />
+          </div>
+        )}
+      </div>
+    </LightboxProvider>
   );
 }

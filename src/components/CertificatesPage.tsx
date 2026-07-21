@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { ArrowLeft, Calendar, Award, Building2, ExternalLink, Shield } from 'lucide-react';
+import { ArrowLeft, Calendar, Award, Building2, Shield } from 'lucide-react';
 import { CERTIFICATES } from '../data/certificates';
+import { SmartImage } from './SmartImage';
 
 type Props = {
   onBack: () => void;
@@ -110,11 +111,11 @@ export default function CertificatesPage({ onBack, dark, onToggleDark }: Props) 
                     <Award className="h-12 w-12 opacity-40" />
                     <span className="font-mono text-xs uppercase tracking-widest">Certificate Photo</span>
                   </div>
-                  <img
+                  <SmartImage
                     src={c.image}
                     alt={c.title}
+                    fill
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).style.display = 'none';
                     }}
@@ -161,22 +162,15 @@ export default function CertificatesPage({ onBack, dark, onToggleDark }: Props) 
                       <span className="font-mono text-[11px] text-ink-400">
                         ID: {c.credentialId}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-xs font-medium text-accent-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:text-accent-400">
+                      {/* <span className="inline-flex items-center gap-1 text-xs font-medium text-accent-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:text-accent-400">
                         View <ExternalLink className="h-3 w-3" />
-                      </span>
+                      </span> */}
                     </div>
                   )}
                 </div>
               </article>
             ))}
           </div>
-
-          <p className="reveal mt-10 text-center text-sm text-ink-400 dark:text-ink-500">
-            More certificates coming soon — data managed in{' '}
-            <span className="font-mono text-ink-500 dark:text-ink-400">
-              src/data/certificates.ts
-            </span>
-          </p>
         </div>
       </section>
     </div>
