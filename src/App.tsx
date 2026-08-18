@@ -23,7 +23,6 @@ import {
   Scale,
   Award,
   Download,
-  Loader2,
 } from 'lucide-react';
 import CertificatesPage from './components/CertificatesPage';
 import { LightboxProvider } from './components/Lightbox';
@@ -322,18 +321,6 @@ function Navbar({
 }
 
 function Hero() {
-  const [downloading, setDownloading] = useState(false);
-
-  const handleDownload = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    if (downloading) return;
-    setDownloading(true);
-    window.setTimeout(() => {
-      setDownloading(false);
-      window.open('#', '_blank');
-    }, 1000);
-  };
-
   return (
     <section id="top" className="relative overflow-hidden pt-36 pb-20 lg:pt-44 lg:pb-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -388,21 +375,12 @@ function Hero() {
             Get in touch
           </a>
           <a
-            href="#"
-            onClick={handleDownload}
+            href="/Hudzal-CV.pdf"
+            download="Hudzal-CV.pdf"
             className="group inline-flex items-center justify-center gap-2 rounded-full border border-accent-400/60 bg-accent-400/10 px-7 py-3.5 text-sm font-semibold text-accent-700 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-400/20 hover:shadow-lg hover:shadow-accent-500/10 dark:text-accent-300 dark:hover:bg-accent-400/15"
           >
-            {downloading ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Preparing…
-              </>
-            ) : (
-              <>
-                <Download className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
-                Download CV
-              </>
-            )}
+            <Download className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+            Download CV
           </a>
         </div>
       </div>
