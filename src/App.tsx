@@ -600,7 +600,7 @@ function Experience() {
                   Work
                 </span>
                 <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight">
-                  NOC Specialist
+                  NOC Specialist - Maxindo Mitra Solusi
                 </h3>
                 <p className="text-sm text-ink-500 dark:text-ink-400">
                   Internet Service Provider
