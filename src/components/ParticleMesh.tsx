@@ -30,7 +30,7 @@ export function ParticleMesh() {
       y: Math.random() * height,
       vx: (Math.random() - 0.5) * 0.25,
       vy: (Math.random() - 0.5) * 0.25,
-      size: Math.random() * 1.5 + 0.8,
+      size: Math.random() * 2 + 1,
     }));
 
     const mouse = { x: -1000, y: -1000 };
@@ -53,8 +53,8 @@ export function ParticleMesh() {
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 140 && dist > 0) {
-          const force = ((140 - dist) / 140) * 0.015;
+        if (dist < 180 && dist > 0) {
+          const force = ((180 - dist) / 180) * 0.018;
           p.vx += (dx / dist) * force;
           p.vy += (dy / dist) * force;
         }
@@ -80,13 +80,13 @@ export function ParticleMesh() {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 110) {
-            const opacity = (1 - dist / 110) * (dark ? 0.2 : 0.15);
+          if (dist < 125) {
+            const opacity = (1 - dist / 125) * (dark ? 0.22 : 0.17);
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.strokeStyle = `rgba(${lineRgb}, ${opacity})`;
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 0.6;
             ctx.stroke();
           }
         }
@@ -96,13 +96,13 @@ export function ParticleMesh() {
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150 && dist > 0) {
-          const opacity = (1 - dist / 150) * 0.3;
+        if (dist < 190 && dist > 0) {
+          const opacity = (1 - dist / 190) * 0.4;
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.strokeStyle = `rgba(${mouseLineRgb}, ${opacity})`;
-          ctx.lineWidth = 0.5;
+          ctx.lineWidth = dist < 120 ? 0.8 : 0.6;
           ctx.stroke();
         }
       });
@@ -122,9 +122,9 @@ export function ParticleMesh() {
   }, []);
 
   return (
-  <canvas
-    ref={canvasRef}
-    className="pointer-events-none absolute inset-0 h-full w-full"
-  />
-);
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none absolute inset-0 h-full w-full"
+    />
+  );
 }
